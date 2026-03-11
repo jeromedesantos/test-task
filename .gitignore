@@ -1,0 +1,37 @@
+# dependencies
+node_modules/
+
+# bun
+bun.lockb
+
+# build output
+dist/
+build/
+
+# environment variables
+.env
+.env.*
+!.env.example
+
+# logs
+logs/
+*.log
+
+# coverage
+coverage/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# editor
+.vscode/
+.idea/
+
+# temporary
+tmp/
+temp/
+.cache/
+
+# typescript
+*.tsbuildinfo
