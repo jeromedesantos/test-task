@@ -1,9 +1,9 @@
 import "dotenv/config";
 import type { CookieOptions } from "express";
 import { signToken } from "./jwt";
-import { UserProps } from "../types";
+import { User } from "../types";
 
-export const token = (user: UserProps) =>
+export const token = (user: User) =>
   signToken({
     id: user.id,
     name: user.name,

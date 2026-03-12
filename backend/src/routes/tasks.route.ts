@@ -9,7 +9,7 @@ import {
 } from "../controllers/tasks.controller";
 import { auth } from "../middlewares/auth.middleware";
 import { validate } from "../middlewares/validate.middleware";
-import { createTaskSchema, updateTaskSchema } from "../utils/zod";
+import { createTaskSchema, updateTaskSchema } from "../schemas/tasks.schema";
 
 const router = express.Router();
 

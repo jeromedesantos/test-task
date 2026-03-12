@@ -1,5 +1,10 @@
 import { z } from "zod";
 
+export const loginSchema = z.object({
+  email: z.string().min(1, "Email is required").email("Invalid email address"),
+  password: z.string().min(1, "Password is required"),
+});
+
 export const registerSchema = z.object({
   name: z
     .string()
@@ -23,18 +28,3 @@ export const updateUserSchema = z
   .refine((data) => data.name || data.email, {
     message: "Nothing to update",
   });
-
-export const updateTaskSchema = z
-  .object({
-    title: z.string().min(1).optional(),
-    description: z.string().optional(),
-    status: z.enum(["PENDING", "IN_PROGRESS", "DONE"]).optional(),
-  })
-  .refine((data) => data.title || data.description || data.status, {
-    message: "At least one field must be updated",
-  });
-
-export const createTaskSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  description: z.string().optional(),
-});

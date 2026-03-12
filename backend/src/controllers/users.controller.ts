@@ -3,7 +3,7 @@ import { prisma } from "../connections/prisma";
 import { AppError } from "../utils/error";
 import { hashPassword, comparePassword } from "../utils/bcrypt";
 import { cookie, token } from "../utils/cookie";
-import { registerSchema, updateUserSchema } from "../utils/zod";
+import { registerSchema, updateUserSchema } from "../schemas/users.schema";
 
 export const getAllUsers: RequestHandler = async (req, res, next) => {
   try {
@@ -43,12 +43,20 @@ export const getUserById: RequestHandler = async (req, res, next) => {
       throw new AppError("User not found", 404);
     }
     res.status(200).json({
-      status: "success",
+      status: "Success",
       data: user,
     });
   } catch (err) {
     next(err);
   }
+};
+
+export const getUserInfo: RequestHandler = (req, res, next) => {
+  const user = (req as any).user;
+  res.status(200).json({
+    status: "Success",
+    data: user,
+  });
 };
 
 export const loginUser: RequestHandler = async (req, res, next) => {

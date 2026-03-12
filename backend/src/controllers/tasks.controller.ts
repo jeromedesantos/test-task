@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
 import { prisma } from "../connections/prisma";
 import { AppError } from "../utils/error";
-import { createTaskSchema, updateTaskSchema } from "../utils/zod";
+import { createTaskSchema, updateTaskSchema } from "../schemas/tasks.schema";
 
 export const createTask: RequestHandler = async (req: any, res, next) => {
   try {
