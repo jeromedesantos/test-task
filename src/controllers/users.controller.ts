@@ -3,8 +3,55 @@ import { prisma } from "../connections/prisma";
 import { AppError } from "../utils/error";
 import { hashPassword, comparePassword } from "../utils/bcrypt";
 import { cookie, token } from "../utils/cookie";
+import { registerSchema, updateUserSchema } from "../utils/zod";
 
-export const loginUsers: RequestHandler = async (req, res, next) => {
+export const getAllUsers: RequestHandler = async (req, res, next) => {
+  try {
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+    res.status(200).json({
+      status: "Success",
+      results: users.length,
+      data: users,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getUserById: RequestHandler = async (req, res, next) => {
+  try {
+    const id = req.params.id as string;
+    const user = await prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+    if (user === null) {
+      throw new AppError("User not found", 404);
+    }
+    res.status(200).json({
+      status: "success",
+      data: user,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const loginUser: RequestHandler = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const existingUser = await prisma.user.findUnique({
@@ -26,21 +73,21 @@ export const loginUsers: RequestHandler = async (req, res, next) => {
       message: "Login success!",
       data: user,
     });
-  } catch (error: any) {
-    next(error);
+  } catch (err) {
+    next(err);
   }
 };
 
-export const logoutUsers: RequestHandler = (req, res, next) => {
+export const logoutUser: RequestHandler = (req, res, next) => {
   res.clearCookie("token", cookie).status(200).json({
     status: "Success",
     message: "Logout successful!",
   });
 };
 
-export const registerUsers: RequestHandler = async (req, res, next) => {
+export const registerUser: RequestHandler = async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password } = registerSchema.parse(req.body);
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
@@ -67,7 +114,77 @@ export const registerUsers: RequestHandler = async (req, res, next) => {
       message: "Register success!",
       data: user,
     });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const updateUser: RequestHandler = async (req, res, next) => {
+  try {
+    const id = req.params.id as string;
+    const { name, email } = updateUserSchema.parse(req.body);
+    const updatedUser = await prisma.user.update({
+      where: { id },
+      data: {
+        name,
+        email,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+    res.status(200).json({
+      status: "Success",
+      message: "User updated successfully",
+      data: updatedUser,
+    });
   } catch (err: any) {
+    if (err.code === "P2025") {
+      return next(new AppError("User not found", 404));
+    }
+    next(err);
+  }
+};
+
+export const deleteUser: RequestHandler = async (req, res, next) => {
+  try {
+    const id = req.params.id as string;
+    const deletedUser = await prisma.user.delete({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+      },
+    });
+    res.status(200).json({
+      status: "success",
+      message: "User deleted successfully",
+      data: deletedUser,
+    });
+  } catch (err: any) {
+    if (err.code === "P2025") {
+      return next(new AppError("User not found", 404));
+    }
+    next(err);
+  }
+};
+
+export const getTasksByUserId: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = req.params.id as string;
+    const tasks = await prisma.task.findMany({
+      where: { userId },
+    });
+    res.status(200).json({
+      status: "Success",
+      data: tasks,
+    });
+  } catch (err) {
     next(err);
   }
 };

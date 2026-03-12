@@ -39,4 +39,5 @@ model Task {
   updatedAt   DateTime   @updatedAt
 
   @@map("tasks")
+  @@unique([id, userId])
 }

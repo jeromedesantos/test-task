@@ -29,5 +29,8 @@ CREATE TABLE "tasks" (
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "tasks_id_userId_key" ON "tasks"("id", "userId");
+
 -- AddForeignKey
 ALTER TABLE "tasks" ADD CONSTRAINT "tasks_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
