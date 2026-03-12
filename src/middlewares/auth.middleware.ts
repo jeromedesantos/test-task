@@ -3,7 +3,7 @@ import { verifyToken } from "../utils/jwt";
 import { AppError } from "../utils/error";
 
 export const auth: RequestHandler = (req, res, next) => {
-  const { token } = req.cookies;
+  const token = req.cookies?.token;
   if (token === null) {
     throw new AppError("You must Login to access!", 401);
   }
@@ -13,7 +13,7 @@ export const auth: RequestHandler = (req, res, next) => {
 };
 
 export const nonAuth: RequestHandler = (req, res, next) => {
-  const { token } = req.cookies;
+  const token = req.cookies?.token;
   if (token) {
     throw new AppError("You're already logged in!", 400);
   }

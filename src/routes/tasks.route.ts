@@ -13,11 +13,11 @@ import { createTaskSchema, updateTaskSchema } from "../utils/zod";
 
 const router = express.Router();
 
-router.post("/tasks", auth, validate(createTaskSchema), createTask);
-router.get("/tasks", getAllTasks);
-router.get("/tasks/my-tasks", auth, getMyTasks);
-router.get("/tasks/:id", getTaskById);
-router.put("/tasks/:id", auth, validate(updateTaskSchema), updateTask);
-router.delete("/tasks/:id", auth, deleteTask);
+router.post("/", auth, validate(createTaskSchema), createTask);
+router.get("/", getAllTasks);
+router.get("/my-tasks", auth, getMyTasks);
+router.get("/:id", getTaskById);
+router.put("/:id", auth, validate(updateTaskSchema), updateTask);
+router.delete("/:id", auth, deleteTask);
 
 export default router;

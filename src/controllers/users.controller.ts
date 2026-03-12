@@ -68,7 +68,7 @@ export const loginUser: RequestHandler = async (req, res, next) => {
       throw new AppError("Invalid password", 401);
     }
     const { password: _, ...user } = existingUser;
-    res.cookie("token", token, cookie).status(200).json({
+    res.cookie("token", token(user), cookie).status(200).json({
       status: "Success",
       message: "Login success!",
       data: user,
@@ -109,7 +109,7 @@ export const registerUser: RequestHandler = async (req, res, next) => {
         updatedAt: true,
       },
     });
-    res.cookie("token", token, cookie).status(200).json({
+    res.cookie("token", token(user), cookie).status(200).json({
       status: "Success",
       message: "Register success!",
       data: user,
