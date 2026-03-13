@@ -5,7 +5,7 @@ export interface User {
 }
 
 interface UserResponse {
-  user: User;
+  data: User;
 }
 
 export interface AuthState {
