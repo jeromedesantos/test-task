@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "bunx prisma generate && tsc",
+    "build": "tsc",
     "start": "node dist/server.js",
     "seed": "ts-node src/connections/seed.ts",
     "studio": "bunx prisma studio",
