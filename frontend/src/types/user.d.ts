@@ -4,10 +4,19 @@ export interface User {
   email: string;
 }
 
-interface LoginResponse {
+interface UserResponse {
   user: User;
 }
 
-export interface RegisterResponse {
-  user: User;
+export interface AuthState {
+  user: User | null;
+  isAuthenticated: boolean;
+  isAuthLoading: boolean;
+  setUser: (user: User) => void;
+  logout: () => void;
+  setAuthLoading: (loading: boolean) => void;
+}
+
+export interface RouteProps {
+  children: React.ReactNode;
 }

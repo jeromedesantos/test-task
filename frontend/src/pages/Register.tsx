@@ -3,7 +3,7 @@ import { register } from "../services/users.service";
 import { registerSchema, type RegisterInput } from "../schemas/users.schema";
 import { appError } from "../lib/api";
 
-export default function Register() {
+export const Register = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [form, setForm] = useState<RegisterInput>({
     name: "",
@@ -92,4 +92,4 @@ export default function Register() {
       </form>
     </div>
   );
-}
+};
