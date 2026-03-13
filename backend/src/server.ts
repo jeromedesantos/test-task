@@ -1,8 +1,8 @@
 import "dotenv/config";
 import app from "./app";
 
-const URL = process.env.BASE_URL || 3000;
-const PORT = process.env.PORT || "http://localhost:3000";
+const PORT = process.env.PORT || 3000;
+const URL = process.env.BASE_URL || "http://localhost:3000";
 
 app.listen(PORT, () =>
   console.log(`
