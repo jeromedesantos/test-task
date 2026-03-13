@@ -1,6 +1,6 @@
 FROM node:20-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /usr/src/server
 
 COPY package*.json ./
 RUN npm install
@@ -14,4 +14,4 @@ RUN npx prisma generate
 
 EXPOSE 80
 # jalankan hasil build-nya
-CMD ["node", "dist/app.js"]
+CMD ["node", "dist/server.js"]
