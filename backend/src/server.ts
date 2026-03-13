@@ -1,10 +1,18 @@
 import "dotenv/config";
-import http from "http";
 import app from "./app";
 
-const PORT = process.env.PORT || 3000;
-const server = http.createServer(app);
+const URL = process.env.BASE_URL || 3000;
+const PORT = process.env.PORT || "http://localhost:3000";
 
-server.listen(PORT, () => {
-  console.log(`🚀 Server berjalan di port ${PORT}`);
-});
+app.listen(PORT, () =>
+  console.log(`
+    ░█████╗░██╗░░██╗
+    ██╔══██╗██║░██╔╝
+    ██║░░██║█████═╝░
+    ██║░░██║██╔═██╗░
+    ╚█████╔╝██║░╚██╗
+    ░╚════╝░╚═╝░░╚═╝
+    
+    𝗟𝗼𝗰𝗮𝗹: ${URL}
+    `),
+);
