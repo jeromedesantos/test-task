@@ -129,7 +129,7 @@ export const Home = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      {/* LOGOUT & PROFILE BUTTON */}
+      {/* LOGOUT BUTTON */}
       <button
         onClick={logoutHandler}
         className="fixed cursor-pointer top-4 right-4 bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600 z-50"
@@ -138,17 +138,17 @@ export const Home = () => {
       </button>
 
       <div className="max-w-3xl mx-auto ">
-        <div className="mb-6 flex justify-between">
-          <h1 className="text-2xl font-semibold ">
-            Welcome back,{" "}
-            <span className="font-bold">{user?.name?.split(" ")[0]}</span> !
-          </h1>
+        <div className="mb-6 flex gap-3 items-center">
           <Link
             to="/profile"
             className="bg-white border-gray-300 border-2 cursor-pointer text-white p-2 rounded-full shadow hover:bg-gray-100"
           >
             👤
           </Link>
+          <h1 className="text-2xl font-semibold ">
+            Welcome back,{" "}
+            <span className="font-bold">{user?.name?.split(" ")[0]}</span> !
+          </h1>
         </div>
 
         {/* CREATE TASK */}

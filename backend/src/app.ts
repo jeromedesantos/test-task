@@ -13,8 +13,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(corsConfig);
 
-app.use("/users", usersRoutes);
-app.use("/tasks", tasksRoutes);
+app.use("/api/users", usersRoutes);
+app.use("/api/tasks", tasksRoutes);
 
 app.get("/", (req, res) => {
   res.send("Server is running");

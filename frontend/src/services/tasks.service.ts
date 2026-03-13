@@ -2,7 +2,8 @@ import { api } from "../lib/api";
 
 export const getMyTasks = async () => {
   const res = await api.get("/tasks/my-tasks");
-  return res.data.data;
+  const task = res.data.data;
+  return task;
 };
 
 export const createTask = async (title: string, description: string) => {
