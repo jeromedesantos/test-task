@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "module": "server.ts",
-  "type": "module",
+  "type": "commonjs",
   "private": true,
   "scripts": {
     "dev": "tsx watch src/server.ts",
