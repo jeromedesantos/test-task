@@ -8,8 +8,6 @@ import { errorHandler } from "./middlewares/error.middleware";
 import { notFound } from "./middlewares/not-found.middleware";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-const URL = process.env.BASE_URL || "http://localhost:3000";
 
 app.use(express.json());
 app.use(cookieParser());
@@ -25,15 +23,4 @@ app.get("/", (req, res) => {
 app.use(notFound);
 app.use(errorHandler);
 
-app.listen(PORT, () =>
-  console.log(`
-    ░█████╗░██╗░░██╗
-    ██╔══██╗██║░██╔╝
-    ██║░░██║█████═╝░
-    ██║░░██║██╔═██╗░
-    ╚█████╔╝██║░╚██╗
-    ░╚════╝░╚═╝░░╚═╝
-    
-    𝗟𝗼𝗰𝗮𝗹: ${URL}
-    `),
-);
+export default app;
