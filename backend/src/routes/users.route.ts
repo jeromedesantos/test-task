@@ -9,6 +9,7 @@ import {
   loginUser,
   logoutUser,
   getTasksByUserId,
+  updateUserById,
 } from "../controllers/users.controller";
 import { auth, nonAuth } from "../middlewares/auth.middleware";
 import { validate } from "../middlewares/validate.middleware";
@@ -24,7 +25,8 @@ router.post("/", nonAuth, validate(registerSchema), registerUser);
 router.get("/", auth, getAllUsers);
 router.get("/me", auth, getUserInfo);
 router.get("/:id", auth, getUserById);
-router.put("/", auth, validate(updateUserSchema), updateUser);
+router.put("/me", auth, validate(updateUserSchema), updateUser);
+router.put("/:id", auth, validate(updateUserSchema), updateUserById);
 router.delete("/", auth, deleteUser);
 router.post("/login", nonAuth, validate(loginSchema), loginUser);
 router.post("/logout", auth, logoutUser);

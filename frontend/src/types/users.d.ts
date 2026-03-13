@@ -1,11 +1,7 @@
 export interface User {
   id: string;
-  name: string;
-  email: string;
-}
-
-interface UserResponse {
-  data: User;
+  name?: string;
+  email?: string;
 }
 
 export interface AuthState {

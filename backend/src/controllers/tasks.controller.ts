@@ -51,6 +51,9 @@ export const getMyTasks: RequestHandler = async (req: any, res, next) => {
     const userId = req.user.id;
     const tasks = await prisma.task.findMany({
       where: { userId },
+      orderBy: {
+        updatedAt: "desc",
+      },
     });
     res.status(200).json({
       status: "Success",
@@ -82,7 +85,7 @@ export const getTaskById: RequestHandler = async (req, res, next) => {
 export const updateTask: RequestHandler = async (req: any, res, next) => {
   try {
     const id = req.params.id as string;
-    const userId = req.user.id;
+    const userId = (req as any).user.id;
     const { title, description, status } = updateTaskSchema.parse(req.body);
     const task = await prisma.task.findFirst({
       where: {

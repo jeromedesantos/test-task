@@ -7,7 +7,8 @@ export const getMyTasks = async () => {
 
 export const createTask = async (title: string, description: string) => {
   const res = await api.post("/tasks", { title, description });
-  return res.data.data;
+  const task = res.data.data;
+  return task;
 };
 
 export const updateTask = async (
@@ -21,7 +22,8 @@ export const updateTask = async (
     description,
     status,
   });
-  return res.data.data;
+  const task = res.data.data;
+  return task;
 };
 
 export const deleteTask = async (id: string) => {

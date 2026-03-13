@@ -8,10 +8,11 @@ import { Login } from "../pages/Login";
 import { Register } from "../pages/Register";
 import { Home } from "../pages/Home";
 import { NotFound } from "../pages/NotFound";
+import { Profile } from "../pages/Profile";
 
 export const router = createBrowserRouter([
   {
-    element: <InitializerRoute />, // 👈 Bungkus semua route
+    element: <InitializerRoute />,
     children: [
       {
         element: <PublicRoute />,
@@ -22,9 +23,11 @@ export const router = createBrowserRouter([
       },
       {
         element: <ProtectedRoute />,
-        children: [{ path: "/", element: <Home /> }],
+        children: [
+          { path: "/", element: <Home /> },
+          { path: "/profile", element: <Profile /> },
+        ],
       },
-
       { path: "*", element: <NotFound /> },
     ],
   },

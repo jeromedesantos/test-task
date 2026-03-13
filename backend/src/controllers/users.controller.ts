@@ -127,12 +127,42 @@ export const registerUser: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const updateUser: RequestHandler = async (req, res, next) => {
+export const updateUserById: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id as string;
     const { name, email } = updateUserSchema.parse(req.body);
     const updatedUser = await prisma.user.update({
       where: { id },
+      data: {
+        name,
+        email,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+    res.status(200).json({
+      status: "Success",
+      message: "User updated successfully",
+      data: updatedUser,
+    });
+  } catch (err: any) {
+    if (err.code === "P2025") {
+      return next(new AppError("User not found", 404));
+    }
+    next(err);
+  }
+};
+export const updateUser: RequestHandler = async (req: any, res, next) => {
+  try {
+    const userId = (req as any).user.id;
+    const { name, email } = updateUserSchema.parse(req.body);
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
       data: {
         name,
         email,

@@ -5,24 +5,33 @@ import {
   deleteTask,
   updateTask,
 } from "../services/tasks.service";
-import { createTaskSchema, updateTaskSchema } from "../schemas/tasks.schema";
+import {
+  createTaskSchema,
+  updateTaskSchema,
+  type CreateTaskInput,
+  type UpdateTaskInput,
+} from "../schemas/tasks.schema";
 import type { Task } from "../types/tasks";
+import { logout } from "../services/users.service";
+import { Link } from "react-router-dom";
+import { useAuthStore } from "../stores/auth.store";
 
 export const Home = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [form, setForm] = useState<Pick<Task, "title" | "description">>({
+  const [form, setForm] = useState<
+    Pick<CreateTaskInput, "title" | "description">
+  >({
     title: "",
     description: "",
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
-  const [editForm, setEditForm] = useState<Pick<Task, "title" | "description">>(
-    {
-      title: "",
-      description: "",
-    },
-  );
+  const [editForm, setEditForm] = useState<UpdateTaskInput>({
+    title: "",
+    description: "",
+  });
+  const user = useAuthStore((state) => state.user);
 
   const fetchTasks = useCallback(async () => {
     try {
@@ -60,12 +69,16 @@ export const Home = () => {
       setErrors(fieldErrors);
       return;
     }
-    await createTask(form.title, form.description as string);
+    await createTask(form.title as string, form.description as string);
     setForm({ title: "", description: "" });
     fetchTasks();
   };
 
   const handleDelete = async (id: string) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this task?",
+    );
+    if (!confirmed) return;
     await deleteTask(id);
     fetchTasks();
   };
@@ -80,7 +93,12 @@ export const Home = () => {
       console.error(result.error.format());
       return;
     }
-    await updateTask(task.id, task.title, task.description || "", newStatus);
+    await updateTask(
+      task.id,
+      task.title || "",
+      task.description || "",
+      newStatus,
+    );
     fetchTasks();
   };
 
@@ -88,6 +106,7 @@ export const Home = () => {
     setEditingTaskId(task.id);
     setEditForm({ title: task.title, description: task.description || "" });
   };
+
   const saveEdit = async (task: Task) => {
     const result = updateTaskSchema.safeParse(editForm);
     if (!result.success) {
@@ -96,18 +115,41 @@ export const Home = () => {
     }
     await updateTask(
       task.id,
-      editForm.title,
+      editForm.title || "",
       editForm.description || "",
-      task.status,
+      task.status || "",
     );
     setEditingTaskId(null);
     fetchTasks();
   };
 
+  const logoutHandler = async () => {
+    await logout();
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="text-2xl font-semibold mb-6">My Tasks</h1>
+      {/* LOGOUT & PROFILE BUTTON */}
+      <button
+        onClick={logoutHandler}
+        className="fixed cursor-pointer top-4 right-4 bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600 z-50"
+      >
+        Logout
+      </button>
+
+      <div className="max-w-3xl mx-auto ">
+        <div className="mb-6 flex justify-between">
+          <h1 className="text-2xl font-semibold ">
+            Welcome back,{" "}
+            <span className="font-bold">{user?.name?.split(" ")[0]}</span> !
+          </h1>
+          <Link
+            to="/profile"
+            className="bg-white border-gray-300 border-2 cursor-pointer text-white p-2 rounded-full shadow hover:bg-gray-100"
+          >
+            👤
+          </Link>
+        </div>
 
         {/* CREATE TASK */}
         <form
@@ -136,7 +178,7 @@ export const Home = () => {
             <p className="text-red-500 text-sm">{errors.description}</p>
           )}
 
-          <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+          <button className="bg-blue-500 cursor-pointer text-white px-4 py-2 rounded hover:bg-blue-600">
             Add Task
           </button>
         </form>
@@ -157,7 +199,7 @@ export const Home = () => {
                 {editingTaskId !== task.id && (
                   <button
                     onClick={() => handleDelete(task.id)}
-                    className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                    className="absolute cursor-pointer top-2 right-2 text-red-500 hover:text-red-700"
                     title="Delete task"
                   >
                     🗑️
@@ -210,13 +252,13 @@ export const Home = () => {
                     <>
                       <button
                         onClick={() => saveEdit(task)}
-                        className="text-sm bg-blue-500 text-white px-3 py-1 rounded"
+                        className="text-sm cursor-pointer bg-blue-500 text-white px-3 py-1 rounded"
                       >
                         Save
                       </button>
                       <button
                         onClick={() => setEditingTaskId(null)}
-                        className="text-sm bg-gray-300 text-gray-800 px-3 py-1 rounded"
+                        className="text-sm cursor-pointer bg-gray-300 text-gray-800 px-3 py-1 rounded"
                       >
                         Cancel
                       </button>
@@ -226,7 +268,7 @@ export const Home = () => {
                       <button
                         disabled={task.status === "DONE"}
                         onClick={() => toggleStatus(task)}
-                        className={`text-sm px-3 py-1 rounded text-white ${
+                        className={`text-sm cursor-pointer px-3 py-1 rounded text-white ${
                           task.status === "PENDING"
                             ? "bg-yellow-500"
                             : task.status === "IN_PROGRESS"
@@ -243,7 +285,7 @@ export const Home = () => {
 
                       <button
                         onClick={() => startEditing(task)}
-                        className="text-sm bg-blue-300 text-white px-3 py-1 rounded"
+                        className="text-sm cursor-pointer bg-blue-300 text-white px-3 py-1 rounded"
                       >
                         Edit
                       </button>
